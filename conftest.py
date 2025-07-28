@@ -1,25 +1,26 @@
 import pytest
+import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selene.support.shared import browser
-
 from utils import attach
 from dotenv import load_dotenv
-import os
 
-
-@pytest.fixture(scope="session", autouse=True)
-def load_env():
-    load_dotenv()
-
-
-selenoid_login = os.getenv("SELENOID_LOGIN")
-selenoid_pass = os.getenv("SELENOID_PASS")
-selenoid_url = os.getenv("SELENOID_URL")
+load_dotenv()
 
 
 @pytest.fixture(scope='function', autouse=True)
 def setup_browser():
+    selenoid_login = os.getenv("SELENOID_LOGIN")
+    selenoid_pass = os.getenv("SELENOID_PASS")
+    selenoid_url = os.getenv("SELENOID_URL")
+
+    if not all([selenoid_login, selenoid_pass, selenoid_url]):
+        raise ValueError(
+            "Ошибка: переменные SELENOID_LOGIN, SELENOID_PASS или SELENOID_URL не заданы. "
+            "Убедитесь, что .env существует или переменные переданы в окружение (например, через Jenkins)."
+        )
+
     options = Options()
     selenoid_capabilities = {
         "browserName": "chrome",
