@@ -12,7 +12,7 @@ from pages.registration_page import RegistrationPage
 @allure.link("http://demoqa.com/automation-practice-form", name="Testing")
 def test_registration_form():
     registration_page = RegistrationPage()
-    test_user = User()
+    est_user = User()
 
     with allure.step("Открыть форму регистрации студента"):
         registration_page.open()
